@@ -1,0 +1,36 @@
+newmtl frame
+Kd 0.275 0.275 0.294
+Ka 0 0 0
+
+newmtl ref_panel
+Kd 0.922 0.910 0.863
+Ka 0 0 0
+
+newmtl backer
+Kd 0.745 0.745 0.745
+Ka 0 0 0
+
+newmtl ref_adapter
+Kd 0.824 0.196 0.196
+Ka 0 0 0
+
+newmtl esp32_strap
+Kd 0.961 0.549 0.118
+Ka 0 0 0
+
+newmtl ref_esp32
+Kd 0.510 0.275 0.745
+Ka 0 0 0
+
+newmtl back_cover
+Kd 0.157 0.431 0.784
+Ka 0 0 0
+
+newmtl foot_1
+Kd 0.235 0.667 0.353
+Ka 0 0 0
+
+newmtl foot_2
+Kd 0.235 0.667 0.353
+Ka 0 0 0
+
