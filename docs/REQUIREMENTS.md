@@ -27,13 +27,16 @@ ESP32 driver board manual. Board sizes were measured or confirmed by the user.
 
 ## Manufacturing constraints
 - FDM, PLA, 220 x 220 mm bed. Every part prints flat without supports.
+- Panel pocket: panel outline + 0.45 mm per side (0.3 mm printed too tight).
 - Fasteners: M3 button-head screws driven straight into the plastic, into Ø2.7 mm pilot holes
   (the first tightening cuts the thread). Every screw gets at least 4 mm of thread in plastic.
+  Each hole has a 0.5 mm 45° chamfer at its mouth (Ø3.7 at the surface) to guide the screw in.
 
 ## Design decisions (implemented in cad/epaper_frame.py)
 - Orientation: landscape, with the FPC edge at the bottom (the wide 9.78 mm border hides there).
 - Bezel window: active area + 0.5 mm per side, offset to match the asymmetric border.
-  The visible bezel is 17.3 mm on the sides and top and 23.6 mm at the bottom.
+  The visible bezel is 17.4 mm on the sides and top and 23.7 mm at the bottom: wider at the bottom
+  because the pixels sit off-centre on the glass (kept on purpose).
 - The panel is pressed from behind by a 4 mm **backer** plate, with 0.5 mm foam tape between them.
   The backer is screwed to the bezel (4x M3).
 - The bezel's back face has a 0.5 mm relief over the driver-chip strip, so nothing presses on the chip.
@@ -49,7 +52,7 @@ ESP32 driver board manual. Board sizes were measured or confirmed by the user.
   The frame stands on its rear bottom edge plus the wedges, leaning back 20°. With no front
   support, 15° would leave the centre of mass only ~5 mm behind the tipping edge; 20° gives
   ~12 mm. The script checks this margin on every build.
-- Overall size: 198.8 x 139.8 x 23.5 mm.
+- Overall size: 199.1 x 140.1 x 23.5 mm.
 - Softened edges (iteration 3): the four vertical corners are rounded R4 on both the frame and
   the cover, so the side profile runs continuously across the joint. Edges that print on the bed
   get 45° chamfers: bezel front 1.5 mm, a 1 mm bevel round the viewing window, back cover 1 mm.

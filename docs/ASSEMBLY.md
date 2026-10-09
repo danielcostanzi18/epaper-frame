@@ -18,7 +18,7 @@
 | foot.stl | 2 | flat face (the one that screws to the cover) down |
 
 ## Hardware
-- M3 button-head screws, driven straight into Ø2.7 mm pilot holes in the plastic:
+- M3 button-head screws, driven straight into Ø2.7 mm pilot holes in the plastic (each with a small chamfer at the mouth):
   8x M3x10 (4 cover corners, 4 feet), 4x M3x6 (backer), 2x M3x8 (strap).
   The first tightening cuts the thread: go in slowly and stop as soon as the head seats.
 - 1x Gateron KS-33 Low Profile 2.0 switch

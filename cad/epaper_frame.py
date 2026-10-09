@@ -55,7 +55,7 @@ ESP_MODULE_FROM_TOP = 15.5        # module can centre, from the board end opposi
 # ----------------------------------------------------------------------------
 # Design parameters
 # ----------------------------------------------------------------------------
-CLR = 0.3              # panel pocket clearance per side
+CLR = 0.45             # panel pocket clearance per side (0.3 printed too tight)
 FOAM_GAP = 0.3         # gap behind the panel, filled by 0.5 mm foam tape on the backer
 WINDOW_OVER = 0.5      # window bigger than the active area by this, per side
 MARGIN = 14.0          # pocket edge to outer edge
@@ -73,6 +73,7 @@ Z_COVER_IN = 20.5      # inner face of the back cover
 PILOT_D = 2.7
 PILOT_DEPTH_CORNER = 8.0       # frame corner bosses, from the cover side
 PILOT_DEPTH_BACKER = 4.8       # frame slab under the backer ears
+PILOT_CHAMFER = 0.5            # 45 deg lead-in at the mouth of every screw hole
 SCREW_D = 3.4
 HEAD_D, HEAD_H = 6.2, 1.8
 CORNER_BOSS_D, CORNER_INSET = 8.0, 6.0
@@ -160,6 +161,13 @@ keyhole_centres = [(OUT_W / 2.0 - 50.0, OUT_H - 24.0), (OUT_W / 2.0 + 50.0, OUT_
 
 def box(x0, y0, z0, x1, y1, z1):
     return Part.makeBox(x1 - x0, y1 - y0, z1 - z0, V(x0, y0, z0))
+
+
+def entry_chamfer(cx, cy, z_surface, inward):
+    """45 deg countersink at the mouth of a pilot hole; inward = -1 or +1 (direction along z into the hole)."""
+    e = 0.01
+    return Part.makeCone(PILOT_D / 2 + PILOT_CHAMFER + e, PILOT_D / 2, PILOT_CHAMFER + e,
+                         V(cx, cy, z_surface - inward * e), V(0, 0, inward))
 
 
 def cyl(cx, cy, z0, z1, d):
@@ -261,6 +269,8 @@ frame = cut_all(frame, [
 ])
 frame = cut_all(frame, [cyl(x, y, Z_COVER_IN - PILOT_DEPTH_CORNER, Z_COVER_IN + 1, PILOT_D) for x, y in corner_centres])
 frame = cut_all(frame, [cyl(x, y, Z_SLAB - PILOT_DEPTH_BACKER, Z_SLAB + 1, PILOT_D) for x, y in ear_centres])
+frame = cut_all(frame, [entry_chamfer(x, y, Z_COVER_IN, -1) for x, y in corner_centres])
+frame = cut_all(frame, [entry_chamfer(x, y, Z_SLAB, -1) for x, y in ear_centres])
 
 # ----------------------------------------------------------------------------
 # Part: backer (presses the panel into the bezel, carries the adapter board)
@@ -301,6 +311,7 @@ cover = fuse_all(cover, pads + locators + posts)
 # Every hole in the cover goes straight through (printed outer face down).
 # Strap posts: screw holes from the post top, through to the outside.
 cover = cut_all(cover, [cyl(x, y, Z_STRAP1 - 1, Z_COVER_OUT + 1, PILOT_D) for x, y in post_centres])
+cover = cut_all(cover, [entry_chamfer(x, y, Z_STRAP1, 1) for x, y in post_centres])
 
 # Cover screws (into the frame's corner bosses), plain holes
 cover = cut_all(cover, [cyl(x, y, Z_COVER_IN - 1, Z_COVER_OUT + 1, SCREW_D) for x, y in corner_centres])
@@ -309,6 +320,7 @@ cover = cut_all(cover, [cyl(x, y, Z_COVER_IN - 1, Z_COVER_OUT + 1, SCREW_D) for 
 foot_pts = [(x, y) for x in foot_xs for y in foot_screw_ys]
 cover = fuse_all(cover, [cyl(x, y, Z_COVER_IN - 4, Z_COVER_IN + 0.01, 9.0) for x, y in foot_pts])
 cover = cut_all(cover, [cyl(x, y, Z_COVER_IN - 5, Z_COVER_OUT + 1, PILOT_D) for x, y in foot_pts])
+cover = cut_all(cover, [entry_chamfer(x, y, Z_COVER_OUT, -1) for x, y in foot_pts])
 
 # Keyholes for wall mounting (screw head <= 8 mm, shank <= 4 mm): the head goes
 # in through the round hole and bears on the cover's inner face.

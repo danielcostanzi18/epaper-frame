@@ -6,9 +6,9 @@ E4,Electronics,FFC extension cable,"24-pin, 0.5 mm pitch",1,pcs,Adapter to ESP32
 E5,Electronics,Gateron KS-33 Low Profile 2.0 switch,"3-pin, plate mount, 1.2 mm plate",1,pcs,Button on the back,No keycap
 E6,Electronics,Hook-up wire,"AWG 26-28, 2 x 25 cm",1,set,Switch to ESP32 GPIO + GND,
 E7,Electronics,USB-C cable + 5 V supply,>= 0.5 A,1,pcs,Power,Plug body must pass a 14 x 9 mm slot
-P1,Printed,Frame,frame.stl 198.8 x 139.8 x 20.5 mm,1,pcs,Bezel + walls,"PLA ~80 g, front face down"
-P2,Printed,Backer,backer.stl 170.4 x 131.8 x 4.0 mm,1,pcs,Presses panel into bezel,"PLA ~70 g, flat back face down"
-P3,Printed,Back cover,back_cover.stl 198.8 x 139.8 x 9.7 mm,1,pcs,Closes the enclosure,"PLA ~95 g, outer face down"
+P1,Printed,Frame,frame.stl 199.1 x 140.1 x 20.5 mm,1,pcs,Bezel + walls,"PLA ~80 g, front face down"
+P2,Printed,Backer,backer.stl 170.7 x 132.1 x 4.0 mm,1,pcs,Presses panel into bezel,"PLA ~70 g, flat back face down"
+P3,Printed,Back cover,back_cover.stl 199.1 x 140.1 x 9.7 mm,1,pcs,Closes the enclosure,"PLA ~95 g, outer face down"
 P4,Printed,ESP32 strap,esp32_strap.stl 10.0 x 47.5 x 2.5 mm,1,pcs,Clamps ESP32,"PLA ~1.5 g, flat"
 P5,Printed,Desk wedge foot,foot.stl 20.0 x 34.0 x 45.0 mm,2,pcs,Desk stand (20 deg),"PLA ~10 g each, screw face down"
 F1,Fastener,Button-head screw,M3 x 10,8,pcs,"4 cover to frame corners, 4 feet",Into 2.7 mm pilot holes in plastic

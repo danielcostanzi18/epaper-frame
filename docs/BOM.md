@@ -18,9 +18,9 @@ Same data as a spreadsheet: `bom.csv`. Part sizes and filament come from `cad/ou
 
 | # | Part | File | Qty | Size (mm) | Filament (est.) | Print orientation |
 |---|---|---|---|---|---|---|
-| P1 | Frame (bezel + walls) | frame.stl | 1 | 198.8 x 139.8 x 20.5 | ~80 g | Front face down |
-| P2 | Backer | backer.stl | 1 | 170.4 x 131.8 x 4.0 | ~70 g | Flat back face down |
-| P3 | Back cover | back_cover.stl | 1 | 198.8 x 139.8 x 9.7 | ~95 g | Outer face down |
+| P1 | Frame (bezel + walls) | frame.stl | 1 | 199.1 x 140.1 x 20.5 | ~80 g | Front face down |
+| P2 | Backer | backer.stl | 1 | 170.7 x 132.1 x 4.0 | ~70 g | Flat back face down |
+| P3 | Back cover | back_cover.stl | 1 | 199.1 x 140.1 x 9.7 | ~95 g | Outer face down |
 | P4 | ESP32 strap | esp32_strap.stl | 1 | 10.0 x 47.5 x 2.5 | ~1.5 g | Flat |
 | P5 | Desk wedge foot | foot.stl | 2 | 20.0 x 34.0 x 45.0 | ~10 g each | Screw face down |
 | | **Total** | | | | **~265 g** | Solid parts would be ~335 g |
