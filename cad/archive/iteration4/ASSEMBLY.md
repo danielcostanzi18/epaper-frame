@@ -3,7 +3,7 @@
 ## Look at it first
 - `cad/out/assembly.FCStd` (assembled) and `cad/out/assembly_exploded.FCStd` open in FreeCAD with
   one colour per part. `assembly*.obj` are the same models for any other 3D viewer.
-- Colours: frame dark grey, panel off-white, panel straps light grey, adapter board red, strap orange,
+- Colours: frame dark grey, panel off-white, backer light grey, adapter board red, strap orange,
   ESP32 purple, back cover blue, feet green. The panel and the two boards are stand-in blocks.
 - To regenerate everything: `freecadcmd epaper_frame.py`, then
   `QT_QPA_PLATFORM=offscreen freecad colour_assembly.py`.
@@ -12,25 +12,26 @@
 | Part | Qty | Orientation |
 |---|---|---|
 | frame.stl | 1 | front face down |
-| panel_strap.stl | 2 | flat face down |
+| backer.stl | 1 | flat back face down (adapter recess on the bed) |
 | back_cover.stl | 1 | outer face down (the key switch floor is a 2 mm overhang round the cutout: no supports needed) |
 | esp32_strap.stl | 1 | flat |
 | foot.stl | 2 | flat face (the one that screws to the cover) down |
 
 ## Hardware
 - M3 button-head screws, driven straight into Ø2.7 mm pilot holes in the plastic (each with a small chamfer at the mouth):
-  8x M3x10 (4 cover corners, 4 feet), 4x M3x6 (panel straps), 2x M3x8 (strap).
+  8x M3x10 (4 cover corners, 4 feet), 4x M3x6 (backer), 2x M3x8 (strap).
   The first tightening cuts the thread: go in slowly and stop as soon as the head seats.
 - 1x Gateron KS-33 Low Profile 2.0 switch
-- 0.5 mm foam tape (panel straps → panel), a 1 mm foam pad (strap → ESP32 module)
+- 0.5 mm foam tape (backer → panel), a 1 mm foam pad (strap → ESP32 module)
 
 ## Steps (looking at the back)
 1. Lay the frame face down. Drop the panel into the pocket with the FPC tail at the **bottom** edge.
-2. Stick a strip of 0.5 mm foam tape along the flat side of each panel strap. Lay the two straps
-   across the panel, ears on the frame's screw holes, and fix each with 2x M3x6.
-3. Fold the FPC tail gently (don't crease it) behind the panel, through the gap at the bottom of
-   the pocket, and plug it into the adapter board. The adapter lies on the back of the panel
-   between the two straps; it's held by its cables, so don't tape it to the panel.
+2. Stick strips of 0.5 mm foam tape around the edge of the backer's flat side.
+   Lay the backer on the panel and fix it with 4x M3x6.
+3. Fold the FPC tail gently (don't crease it) round the backer's bottom edge, through the gap
+   at the bottom of the pocket. Plug it into the adapter board, then seat the adapter in the
+   backer's recess. Slide it sideways until the tail lies flat. A small piece of tape onto the
+   backer is fine; never tape anything to the panel.
 4. Connect the FFC extension cable to the adapter board.
 5. Place the ESP32 on the back cover's 4 pads inside the corner locators, USB end towards the
    right-hand short side (seen from the back). Put the 1 mm foam pad on the module can and

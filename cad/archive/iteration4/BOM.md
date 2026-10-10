@@ -1,6 +1,6 @@
-# Bill of Materials — e-paper frame (iteration 5)
+# Bill of Materials — e-paper frame (iteration 4)
 
-Same data as a spreadsheet: `bom.csv`. Part sizes and filament come from `cad/out/` (iteration 5).
+Same data as a spreadsheet: `bom.csv`. Part sizes and filament come from `cad/out/` (iteration 4).
 
 ## 1. Electronics
 
@@ -19,11 +19,11 @@ Same data as a spreadsheet: `bom.csv`. Part sizes and filament come from `cad/ou
 | # | Part | File | Qty | Size (mm) | Filament (est.) | Print orientation |
 |---|---|---|---|---|---|---|
 | P1 | Frame (bezel + walls) | frame.stl | 1 | 199.1 x 140.1 x 20.5 | ~80 g | Front face down |
-| P2 | Panel strap | panel_strap.stl | 2 | 14.0 x 132.1 x 4.0 | ~8 g each | Flat face down |
+| P2 | Backer | backer.stl | 1 | 170.7 x 132.1 x 4.0 | ~70 g | Flat back face down |
 | P3 | Back cover | back_cover.stl | 1 | 199.1 x 140.1 x 9.7 | ~95 g | Outer face down |
 | P4 | ESP32 strap | esp32_strap.stl | 1 | 10.0 x 47.5 x 2.5 | ~1.5 g | Flat |
 | P5 | Desk wedge foot | foot.stl | 2 | 20.0 x 34.0 x 45.0 | ~10 g each | Screw face down |
-| | **Total** | | | | **~210 g** | Solid parts would be ~260 g |
+| | **Total** | | | | **~265 g** | Solid parts would be ~335 g |
 
 Filament estimates assume 3 walls, 4 top/bottom layers and 20 % infill. Every part fits a 220 x 220 mm bed.
 
@@ -32,7 +32,7 @@ Filament estimates assume 3 walls, 4 top/bottom layers and 20 % infill. Every pa
 | # | Item | Spec | Qty | Used for |
 |---|---|---|---|---|
 | F1 | Button-head screw | M3 x 10 | 8 | 4 back cover → frame corners, 4 feet (2 per foot) |
-| F2 | Button-head screw | M3 x 6 | 4 | Panel straps → frame (2 per strap) |
+| F2 | Button-head screw | M3 x 6 | 4 | Backer → frame |
 | F3 | Button-head screw | M3 x 8 | 2 | ESP32 strap → back cover |
 | F4 | Wall screw + plug | Head Ø ≤ 8 mm, shank Ø ≤ 4 mm | 2 | Wall mounting, 100 mm apart. Optional, wall use only |
 
@@ -43,8 +43,9 @@ thread. Plain M3 machine screws work. Don't overtighten, and buy a couple of spa
 
 | # | Item | Spec | Qty | Used for |
 |---|---|---|---|---|
-| C1 | Foam tape | 0.5 mm thick, ~10 mm wide, ~25 cm | 1 | Along each panel strap, between strap and panel |
+| C1 | Foam tape | 0.5 mm thick, ~5 mm wide, ~60 cm | 1 | Between backer and panel, round the edge |
 | C2 | Foam pad | 1 mm thick, ~10 x 15 mm | 1 | Between strap and ESP32 module can |
+| C3 | Thin double-sided or Kapton tape | small piece | 1 | Optional: holds the adapter board in its recess (never on the panel) |
 
 ## 5. Tools
 Soldering iron (switch wires), M3 hex/screwdriver, flush cutters.

@@ -7,13 +7,14 @@ E5,Electronics,Gateron KS-33 Low Profile 2.0 switch,"3-pin, plate mount, 1.2 mm 
 E6,Electronics,Hook-up wire,"AWG 26-28, 2 x 25 cm",1,set,Switch to ESP32 GPIO + GND,
 E7,Electronics,USB-C cable + 5 V supply,>= 0.5 A,1,pcs,Power,Plug body must pass a 14 x 9 mm slot
 P1,Printed,Frame,frame.stl 199.1 x 140.1 x 20.5 mm,1,pcs,Bezel + walls,"PLA ~80 g, front face down"
-P2,Printed,Panel strap,panel_strap.stl 14.0 x 132.1 x 4.0 mm,2,pcs,Presses panel into bezel,"PLA ~8 g each, flat face down"
+P2,Printed,Backer,backer.stl 170.7 x 132.1 x 4.0 mm,1,pcs,Presses panel into bezel,"PLA ~70 g, flat back face down"
 P3,Printed,Back cover,back_cover.stl 199.1 x 140.1 x 9.7 mm,1,pcs,Closes the enclosure,"PLA ~95 g, outer face down"
 P4,Printed,ESP32 strap,esp32_strap.stl 10.0 x 47.5 x 2.5 mm,1,pcs,Clamps ESP32,"PLA ~1.5 g, flat"
 P5,Printed,Desk wedge foot,foot.stl 20.0 x 34.0 x 45.0 mm,2,pcs,Desk stand (20 deg),"PLA ~10 g each, screw face down"
 F1,Fastener,Button-head screw,M3 x 10,8,pcs,"4 cover to frame corners, 4 feet",Into 2.7 mm pilot holes in plastic
-F2,Fastener,Button-head screw,M3 x 6,4,pcs,Panel straps to frame (2 per strap),Into 2.7 mm pilot holes in plastic
+F2,Fastener,Button-head screw,M3 x 6,4,pcs,Backer to frame,Into 2.7 mm pilot holes in plastic
 F3,Fastener,Button-head screw,M3 x 8,2,pcs,ESP32 strap to cover,Into 2.7 mm pilot holes in plastic
 F4,Fastener,Wall screw + plug,"head <= 8 mm, shank <= 4 mm",2,pcs,Wall mounting (optional),100 mm apart
-C1,Consumable,Foam tape,"0.5 mm thick, 10 mm wide",25,cm,Along each panel strap,
+C1,Consumable,Foam tape,"0.5 mm thick, 5 mm wide",60,cm,Backer to panel edge,
 C2,Consumable,Foam pad,"1 mm thick, 10 x 15 mm",1,pcs,Strap to ESP32 module can,
+C3,Consumable,Double-sided or Kapton tape,small piece,1,pcs,Adapter board in its recess (optional),Never on the panel

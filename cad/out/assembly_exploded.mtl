@@ -6,7 +6,11 @@ newmtl ref_panel
 Kd 0.922 0.910 0.863
 Ka 0 0 0
 
-newmtl backer
+newmtl panel_strap_1
+Kd 0.745 0.745 0.745
+Ka 0 0 0
+
+newmtl panel_strap_2
 Kd 0.745 0.745 0.745
 Ka 0 0 0
 

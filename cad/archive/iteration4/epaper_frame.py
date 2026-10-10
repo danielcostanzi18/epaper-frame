@@ -13,13 +13,13 @@ Coordinates (all parts share them, so the assembly lines up):
 
 Parts written to out/:
   frame       front bezel + side walls + corner bosses      (print front face down)
-  panel_strap vertical strap that presses the panel into the bezel, print 2 (flat face down)
+  backer      plate that presses the panel into the bezel   (print back face down)
   back_cover  cover + ESP32 cradle + keyholes + feet bosses (print outer face down)
   esp32_strap bar that clamps the ESP32 by its module can   (print flat)
   foot        removable desk wedge, print 2                 (print screw face down)
 
 Hardware: M3 button-head screws driven straight into the plastic (d2.7 pilot holes,
-the first tightening cuts the thread): 4x M3x10 (cover), 4x M3x6 (panel straps),
+the first tightening cuts the thread): 4x M3x10 (cover), 4x M3x6 (backer),
 2x M3x8 (strap), 4x M3x10 (feet).
 
 Run: freecadcmd epaper_frame.py
@@ -56,20 +56,19 @@ ESP_MODULE_FROM_TOP = 15.5        # module can centre, from the board end opposi
 # Design parameters
 # ----------------------------------------------------------------------------
 CLR = 0.45             # panel pocket clearance per side (0.3 printed too tight)
-FOAM_GAP = 0.3         # gap behind the panel, filled by 0.5 mm foam tape on the panel straps
+FOAM_GAP = 0.3         # gap behind the panel, filled by 0.5 mm foam tape on the backer
 WINDOW_OVER = 0.5      # window bigger than the active area by this, per side
 MARGIN = 14.0          # pocket edge to outer edge
 WALL = 2.4
 FRONT_T = 2.5
-BACKER_T = 4.0         # panel straps: thickness where they press the panel
-PANEL_STRAP_W = 14.0   # width of each strap (same as its screw ears)
+BACKER_T = 4.0
 EAR_T = 2.0
 COVER_T = 3.0
 Z_COVER_IN = 20.5      # inner face of the back cover
 
 # Screws thread straight into the plastic. 2.7 mm suits M3 in PLA; go 2.5 for a
 # tighter grip or 2.8 if the plastic splits. Depths give each screw at least 4 mm of
-# thread: corners 7 mm (M3x10 through the 3 mm cover), panel straps 4 mm (M3x6 through the
+# thread: corners 7 mm (M3x10 through the 3 mm cover), backer 4 mm (M3x6 through the
 # 2 mm ear), strap 5.5 mm (M3x8), feet 6 mm (M3x10 through 4 mm of foot).
 PILOT_D = 2.7
 PILOT_DEPTH_CORNER = 8.0       # frame corner bosses, from the cover side
@@ -117,16 +116,12 @@ corner_centres = [(CORNER_INSET, CORNER_INSET), (OUT_W - CORNER_INSET, CORNER_IN
 ear_xs = [PANEL_X0 + 0.25 * PANEL_W, PANEL_X0 + 0.75 * PANEL_W]
 ear_centres = [(x, PY0 - 5.0) for x in ear_xs] + [(x, PY1 + 5.0) for x in ear_xs]
 
-# Adapter board: plugged onto the panel's FPC tail, which folds behind the panel at
-# the bottom edge. It lies on the back of the panel between the two panel straps and
-# is held by its two cables. Its exact x depends on where the tail sits, so the
-# clearance check reserves ADAPTER_SLACK either side.
-ADAPTER_SLACK = 6.0
-ADAPTER_X0 = PANEL_X0 + sum(FPC_ZONE) / 2.0 - ADAPTER_W / 2.0
-ADAPTER_Y0 = PY0 + 2.0
-ADAPTER_Z0 = Z_BACKER0
-ADAPTER_BOX = (ADAPTER_X0, ADAPTER_Y0, ADAPTER_Z0, ADAPTER_X0 + ADAPTER_W, ADAPTER_Y0 + ADAPTER_H,
-               ADAPTER_Z0 + ADAPTER_PCB_T + ADAPTER_PARTS_H)
+# Adapter board: lies in a recess on the backer, just above the bottom edge, so
+# the panel's FPC tail folds round the backer's bottom edge straight into it.
+ADAPTER_SLACK = 12.0   # extra recess width so it can slide to match the tail position
+REC_W, REC_H, REC_D = ADAPTER_W + ADAPTER_SLACK, ADAPTER_H + 1.0, 1.2
+REC_X0 = PANEL_X0 + sum(FPC_ZONE) / 2.0 - REC_W / 2.0
+REC_Y0 = PY0 + 2.0
 
 # ESP32 board: long edge horizontal, USB end against the right-hand short wall
 # (seen from the back) so the cable plugs in through a slot in that wall.
@@ -195,10 +190,9 @@ def cut_all(base, shapes):
 # Clearance checks (axis-aligned envelopes of everything inside the cavity)
 # ----------------------------------------------------------------------------
 env = {
-    "panel_strap0": (ear_xs[0] - PANEL_STRAP_W / 2, PY0 - 10, Z_BACKER0, ear_xs[0] + PANEL_STRAP_W / 2, PY1 + 10, Z_BACKER1),
-    "panel_strap1": (ear_xs[1] - PANEL_STRAP_W / 2, PY0 - 10, Z_BACKER0, ear_xs[1] + PANEL_STRAP_W / 2, PY1 + 10, Z_BACKER1),
-    "adapter": (ADAPTER_BOX[0] - ADAPTER_SLACK, ADAPTER_BOX[1], ADAPTER_BOX[2],
-                ADAPTER_BOX[3] + ADAPTER_SLACK, ADAPTER_BOX[4], ADAPTER_BOX[5]),
+    "backer": (PX0, PY0, Z_BACKER0, PX1, PY1, Z_BACKER1),
+    "adapter": (REC_X0, REC_Y0, Z_BACKER1 - REC_D, REC_X0 + REC_W, REC_Y0 + REC_H,
+                Z_BACKER1 - REC_D + ADAPTER_PCB_T + ADAPTER_PARTS_H),
     "esp32": (ESP_X0, ESP_Y0, Z_ESP_PARTS, ESP_X1, ESP_Y1, Z_COVER_IN),
     "strap": (STRAP_X - STRAP_W / 2, post_centres[0][1] - 4, Z_STRAP0 - HEAD_H,
               STRAP_X + STRAP_W / 2, post_centres[1][1] + 4, Z_STRAP1),
@@ -220,8 +214,8 @@ for i, (x, y) in enumerate(keyhole_centres):
     # head of the wall screw, which ends up inside the cavity behind the keyhole
     env[f"wall_screw_head{i}"] = (x - 4.25, y - 4.25, Z_COVER_IN - 4, x + 4.25, y + 14.25, Z_COVER_IN)
 
-touching = {("strap", "post0"), ("strap", "post1")} | \
-           {(f"panel_strap{j}", f"ear_screw{i}") for i in range(4) for j in range(2)}
+touching = {("adapter", "backer"), ("strap", "post0"), ("strap", "post1")} | \
+           {("backer", f"ear_screw{i}") for i in range(4)}
 
 
 def gap_ok(a, b):
@@ -268,31 +262,24 @@ frame = frame.makeChamfer(WINDOW_CHAMFER, edges_on_plane(frame, 0.0, WX0 - 0.01,
 frame = frame.cut(box(WALL, WALL, Z_SLAB, OUT_W - WALL, OUT_H - WALL, Z_COVER_IN + 1))  # cavity
 frame = fuse_all(frame, [cyl(x, y, Z_SLAB - 0.01, Z_COVER_IN, CORNER_BOSS_D) for x, y in corner_centres])
 frame = cut_all(frame, [
-    box(PX0, PY0, FRONT_T, PX1, PY1, Z_SLAB + 1),                                    # panel pocket
+    box(PX0, PY0, FRONT_T, PX1, PY1, Z_SLAB + 1),                                    # panel + backer pocket
     box(PANEL_X0 + FPC_ZONE[0], PY0 - 4.0, FRONT_T, PANEL_X0 + FPC_ZONE[1], PY0 + 1, Z_SLAB + 1),  # FPC fold relief
     box(PX0 + 10, PY0, FRONT_T - 0.5, PX1 - 10, WY0, FRONT_T + 0.01),               # driver-chip relief
     box(OUT_W - WALL - 1, USB_Y - USB_SLOT_W / 2, USB_Z - USB_SLOT_H / 2, OUT_W + 1, USB_Y + USB_SLOT_W / 2, Z_COVER_IN + 1),
 ])
-
 frame = cut_all(frame, [cyl(x, y, Z_COVER_IN - PILOT_DEPTH_CORNER, Z_COVER_IN + 1, PILOT_D) for x, y in corner_centres])
 frame = cut_all(frame, [cyl(x, y, Z_SLAB - PILOT_DEPTH_BACKER, Z_SLAB + 1, PILOT_D) for x, y in ear_centres])
 frame = cut_all(frame, [entry_chamfer(x, y, Z_COVER_IN, -1) for x, y in corner_centres])
 frame = cut_all(frame, [entry_chamfer(x, y, Z_SLAB, -1) for x, y in ear_centres])
 
 # ----------------------------------------------------------------------------
-# Part: panel straps (iteration 5). Two vertical bars press the panel into the bezel
-# through foam tape; each is screwed to the frame at both ends. They replace the
-# full backer plate of iteration 4. Both straps are identical.
+# Part: backer (presses the panel into the bezel, carries the adapter board)
 # ----------------------------------------------------------------------------
-def make_panel_strap(x):
-    hw = PANEL_STRAP_W / 2
-    s = box(x - hw, PY0 + 0.2, Z_BACKER0, x + hw, PY1 - 0.2, Z_BACKER1)
-    s = fuse_all(s, [box(x - hw, min(y - 5, PY1 - 1), Z_SLAB, x + hw, max(y + 5, PY0 + 1), Z_BACKER1)
-                     for ex, y in ear_centres if ex == x])
-    return cut_all(s, [cyl(ex, y, Z_SLAB - 1, Z_BACKER1 + 1, SCREW_D) for ex, y in ear_centres if ex == x])
-
-
-panel_straps = [make_panel_strap(x) for x in ear_xs]
+backer = box(PX0 + 0.2, PY0 + 0.2, Z_BACKER0, PX1 - 0.2, PY1 - 0.2, Z_BACKER1)
+backer = fuse_all(backer, [box(x - 7, min(y - 5, PY1 - 1), Z_SLAB, x + 7, max(y + 5, PY0 + 1), Z_BACKER1)
+                           for x, y in ear_centres])
+backer = cut_all(backer, [cyl(x, y, Z_SLAB - 1, Z_BACKER1 + 1, SCREW_D) for x, y in ear_centres])
+backer = backer.cut(box(REC_X0, REC_Y0, Z_BACKER1 - REC_D, REC_X0 + REC_W, REC_Y0 + REC_H, Z_BACKER1 + 1))
 
 # ----------------------------------------------------------------------------
 # Part: back cover
@@ -389,7 +376,7 @@ feet = [make_foot(x) for x in foot_xs]
 # so the centre of mass has to land behind that edge by a safe margin.
 PLA_DENSITY = 1.24e-3            # g/mm^3, printed parts treated as solid (worst case)
 masses = [(sol.Volume * PLA_DENSITY, sol.CenterOfMass)
-          for s in (frame, *panel_straps, cover, strap, *feet) for sol in s.Solids]
+          for s in (frame, backer, cover, strap, *feet) for sol in s.Solids]
 masses.append((44.0, V(PANEL_X0 + PANEL_W / 2, PANEL_Y0 + PANEL_H / 2, (FRONT_T + Z_PANEL1) / 2)))
 masses.append((10.0, V(ESP_X0 + ESP_L / 2, ESP_Y0 + ESP_W / 2, Z_ESP_TOP)))
 total = sum(m for m, _ in masses)
@@ -402,7 +389,7 @@ assert 8.0 <= tip_margin <= heel_reach - 8.0, f"desk stance unstable: CoG {tip_m
 # ----------------------------------------------------------------------------
 # Export
 # ----------------------------------------------------------------------------
-parts = {"frame": frame, "panel_strap": panel_straps[0], "back_cover": cover, "esp32_strap": strap, "foot": feet[0]}
+parts = {"frame": frame, "backer": backer, "back_cover": cover, "esp32_strap": strap, "foot": feet[0]}
 for name, shape in parts.items():
     shape = shape.removeSplitter()
     assert shape.isValid() and shape.isClosed() and len(shape.Solids) == 1, f"{name}: not a single valid solid"
@@ -418,9 +405,8 @@ assembly = {
     "frame":       (parts["frame"],       (70, 70, 75),    0),
     "ref_panel":   (box(PANEL_X0, PANEL_Y0, FRONT_T, PANEL_X0 + PANEL_W, PANEL_Y0 + PANEL_H, Z_PANEL1),
                     (235, 232, 220), 30),
-    "panel_strap_1": (parts["panel_strap"], (190, 190, 190), 60),
-    "panel_strap_2": (panel_straps[1].removeSplitter(), (190, 190, 190), 60),
-    "ref_adapter": (box(*ADAPTER_BOX),     (210, 50, 50),   90),
+    "backer":      (parts["backer"],      (190, 190, 190), 60),
+    "ref_adapter": (box(*env["adapter"]),  (210, 50, 50),   90),
     "esp32_strap": (parts["esp32_strap"], (245, 140, 30),  120),
     "ref_esp32":   (box(*env["esp32"]),    (130, 70, 190),  150),
     # stand-in for the key switch: top housing, stem, bottom housing, centre post
@@ -478,7 +464,7 @@ print(f"Outer size: {OUT_W:.1f} x {OUT_H:.1f} x {Z_COVER_OUT:.1f} mm (feet off)"
 print(f"Desk stance: {FOOT_TILT:.0f} deg lean, est. mass {total:.0f} g, "
       f"CoG {tip_margin:.1f} mm behind the tipping edge (support reaches {heel_reach:.1f} mm)")
 print(f"Visible bezel: sides/top {WX0:.1f} mm, bottom {WY0:.1f} mm")
-print(f"Cavity: {Z_COVER_IN - Z_BACKER1:.1f} mm between panel straps and cover")
+print(f"Cavity: {Z_COVER_IN - Z_BACKER1:.1f} mm between backer and cover")
 print("Min gaps between internal parts >= %.1f mm: OK" % MIN_GAP)
 for name, shape in parts.items():
     bb = shape.BoundBox

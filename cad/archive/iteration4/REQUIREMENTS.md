@@ -37,14 +37,12 @@ ESP32 driver board manual. Board sizes were measured or confirmed by the user.
 - Bezel window: active area + 0.5 mm per side, offset to match the asymmetric border.
   The visible bezel is 17.4 mm on the sides and top and 23.7 mm at the bottom: wider at the bottom
   because the pixels sit off-centre on the glass (kept on purpose).
-- The panel is pressed from behind by two vertical **panel straps** (14 x 132 x 4 mm, iteration 5),
-  with 0.5 mm foam tape between straps and panel. Each strap is screwed to the bezel at both ends
-  (4x M3 in total). They replace the full backer plate of iteration 4, which used ~5x more plastic.
+- The panel is pressed from behind by a 4 mm **backer** plate, with 0.5 mm foam tape between them.
+  The backer is screwed to the bezel (4x M3).
 - The bezel's back face has a 0.5 mm relief over the driver-chip strip, so nothing presses on the chip.
-- A 50 mm wide relief at the bottom edge leaves room for the FPC tail to fold behind the panel.
-- The adapter board lies on the back of the panel between the two straps, held by its two cables.
-  There is 6 mm of free space either side of it, because the tail position depends on which end
-  the 78 mm is measured from.
+- A 50 mm wide relief at the bottom edge leaves room for the FPC tail to fold behind the backer.
+- The adapter board sits in a recess on the backer's back face. The recess has 12 mm of side slack
+  because the tail position depends on which end the 78 mm is measured from.
 - The ESP32 sits on the back cover on 4 support pads. Corner locators hold it in place sideways,
   and a screwed strap with a foam pad presses on the module can.
 - The ESP32 lies with its long edge horizontal and its USB end against the right-hand short wall
@@ -62,11 +60,10 @@ ESP32 driver board manual. Board sizes were measured or confirmed by the user.
 - Key switch (iteration 4): on the back cover, top centre, in line with the keyholes. It clips from
   outside into a 14 x 14 cutout in a 1.2 mm floor at the bottom of an 18 x 18 mm well, 6.5 mm deep,
   with a 1 mm chamfer round the rim. The bare stem stays 0.5 mm below the back surface, so the
-  frame still sits flat on a wall. The cup sits 0.8 mm clear of the panel-strap level, allowing for the pins
+  frame still sits flat on a wall. The cup sits 0.8 mm clear of the backer, allowing for the pins
   and soldered wires.
-- Previous iterations are kept untouched in cad/archive/: iteration2/ (sharp edges), iteration3/
-  (softened edges, no key switch), iteration4_heatset/ (heat-set inserts) and iteration4/ (full
-  backer plate with adapter recess).
+- Previous iterations are kept untouched in cad/archive/iteration2/ (sharp edges) and
+  cad/archive/iteration3/ (softened edges, no key switch).
 
 ## Open items to verify on the real parts
 1. The FPC tail is on the long edge with the wider (9.78 mm) border. If the window ends up
