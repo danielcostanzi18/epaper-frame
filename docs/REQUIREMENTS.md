@@ -27,7 +27,10 @@ ESP32 driver board manual. Board sizes were measured or confirmed by the user.
 
 ## Manufacturing constraints
 - FDM, PLA, 220 x 220 mm bed. Every part prints flat without supports.
-- Panel pocket: panel outline + 0.45 mm per side (0.3 mm printed too tight).
+- Panel pocket (iteration 5): 1.5 mm bigger than the panel + clearance on every side, so the
+  panel's sharp corners and edges touch nothing (a printer always rounds inside corners a little).
+  The panel is located by 8 teeth, two per side at 1/4 and 3/4 of each edge, 8 mm wide, with
+  0.45 mm clearance to the panel (0.3 mm printed too tight) and a 0.6 mm lead-in chamfer at the back.
 - Fasteners: M3 button-head screws driven straight into the plastic, into Ø2.7 mm pilot holes
   (the first tightening cuts the thread). Every screw gets at least 4 mm of thread in plastic.
   Each hole has a 0.5 mm 45° chamfer at its mouth (Ø3.7 at the surface) to guide the screw in.

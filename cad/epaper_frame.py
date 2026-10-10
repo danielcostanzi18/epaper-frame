@@ -55,7 +55,13 @@ ESP_MODULE_FROM_TOP = 15.5        # module can centre, from the board end opposi
 # ----------------------------------------------------------------------------
 # Design parameters
 # ----------------------------------------------------------------------------
-CLR = 0.45             # panel pocket clearance per side (0.3 printed too tight)
+CLR = 0.45             # panel clearance per side at the locating teeth (0.3 printed too tight)
+# Iteration 5: the pocket is POCKET_RELIEF bigger than the panel on every side, so the
+# panel's sharp corners and edges touch nothing (a printer rounds inside corners). Eight
+# teeth, two per side at 1/4 and 3/4, locate it; each has a lead-in chamfer at the back.
+POCKET_RELIEF = 1.5
+TOOTH_W = 8.0
+TOOTH_LEADIN = 0.6
 FOAM_GAP = 0.3         # gap behind the panel, filled by 0.5 mm foam tape on the panel straps
 WINDOW_OVER = 0.5      # window bigger than the active area by this, per side
 MARGIN = 14.0          # pocket edge to outer edge
@@ -268,12 +274,31 @@ frame = frame.makeChamfer(WINDOW_CHAMFER, edges_on_plane(frame, 0.0, WX0 - 0.01,
 frame = frame.cut(box(WALL, WALL, Z_SLAB, OUT_W - WALL, OUT_H - WALL, Z_COVER_IN + 1))  # cavity
 frame = fuse_all(frame, [cyl(x, y, Z_SLAB - 0.01, Z_COVER_IN, CORNER_BOSS_D) for x, y in corner_centres])
 frame = cut_all(frame, [
-    box(PX0, PY0, FRONT_T, PX1, PY1, Z_SLAB + 1),                                    # panel pocket
+    box(PX0 - POCKET_RELIEF, PY0 - POCKET_RELIEF, FRONT_T,
+        PX1 + POCKET_RELIEF, PY1 + POCKET_RELIEF, Z_SLAB + 1),                       # panel pocket + relief
     box(PANEL_X0 + FPC_ZONE[0], PY0 - 4.0, FRONT_T, PANEL_X0 + FPC_ZONE[1], PY0 + 1, Z_SLAB + 1),  # FPC fold relief
     box(PX0 + 10, PY0, FRONT_T - 0.5, PX1 - 10, WY0, FRONT_T + 0.01),               # driver-chip relief
     box(OUT_W - WALL - 1, USB_Y - USB_SLOT_W / 2, USB_Z - USB_SLOT_H / 2, OUT_W + 1, USB_Y + USB_SLOT_W / 2, Z_COVER_IN + 1),
 ])
 
+
+def make_tooth(x0, y0, x1, y1, axis, face):
+    """Locating tooth, full pocket depth; chamfers the edge where its panel-facing face meets the back."""
+    t = box(x0, y0, FRONT_T, x1, y1, Z_SLAB)
+    edges = [e for e in t.Edges if all(abs(v.Z - Z_SLAB) < 1e-6 and abs(getattr(v, axis) - face) < 1e-6
+                                       for v in e.Vertexes)]
+    return t.makeChamfer(TOOTH_LEADIN, edges)
+
+
+R, hw = POCKET_RELIEF, TOOTH_W / 2
+teeth = []
+for f in (0.25, 0.75):
+    tx, ty = PX0 + f * POCKET_W, PY0 + f * POCKET_H
+    teeth += [make_tooth(tx - hw, PY0 - R - 0.01, tx + hw, PY0, "Y", PY0),     # bottom
+              make_tooth(tx - hw, PY1, tx + hw, PY1 + R + 0.01, "Y", PY1),     # top
+              make_tooth(PX0 - R - 0.01, ty - hw, PX0, ty + hw, "X", PX0),     # left
+              make_tooth(PX1, ty - hw, PX1 + R + 0.01, ty + hw, "X", PX1)]     # right
+frame = fuse_all(frame, teeth)
 frame = cut_all(frame, [cyl(x, y, Z_COVER_IN - PILOT_DEPTH_CORNER, Z_COVER_IN + 1, PILOT_D) for x, y in corner_centres])
 frame = cut_all(frame, [cyl(x, y, Z_SLAB - PILOT_DEPTH_BACKER, Z_SLAB + 1, PILOT_D) for x, y in ear_centres])
 frame = cut_all(frame, [entry_chamfer(x, y, Z_COVER_IN, -1) for x, y in corner_centres])
